@@ -9,20 +9,6 @@ import { ElMessage } from 'element-plus'
  * 定义所有可分享的页面
  */
 export const shareablePages = [
-  // ==================== 驾驶舱 ====================
-  {
-    name: '集团看板',
-    path: '/dashboard/group',
-    icon: '&#xe81a;',
-    description: '集团数据总览看板'
-  },
-  {
-    name: '数据对比',
-    path: '/dashboard/compare',
-    icon: '&#xe81a;',
-    description: '多维度数据对比分析'
-  },
-
   // ==================== 安全管理 ====================
   {
     name: '应急抢修管理',
