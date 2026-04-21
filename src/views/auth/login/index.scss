@@ -1,0 +1,488 @@
+@use '@styles/variables.scss' as *;
+
+/* ===== 登录页 - 智慧水务科技风 ===== */
+.login-page {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100vh;
+  background: #030d1a;
+  overflow: hidden;
+}
+
+/* 背景网格 */
+.bg-grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(0, 180, 255, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 180, 255, 0.04) 1px, transparent 1px);
+  background-size: 48px 48px;
+  pointer-events: none;
+
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse 80% 60% at 50% 50%, transparent 40%, #030d1a 100%);
+  }
+}
+
+/* 粒子 */
+.particles {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+
+  .particle {
+    position: absolute;
+    bottom: -6px;
+    border-radius: 50%;
+    background: rgba(0, 220, 255, 0.6);
+    box-shadow: 0 0 6px rgba(0, 220, 255, 0.8);
+    animation: floatUp linear infinite;
+  }
+}
+
+@keyframes floatUp {
+  0%   { transform: translateY(0) scale(1);   opacity: 0.8; }
+  80%  { opacity: 0.4; }
+  100% { transform: translateY(-100vh) scale(0.4); opacity: 0; }
+}
+
+/* 水波装饰（底部） */
+.water-waves {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 120px;
+  pointer-events: none;
+
+  svg {
+    width: 100%;
+    height: 100%;
+  }
+
+  .wave {
+    fill: rgba(0, 120, 200, 0.1);
+  }
+
+  .wave-1 {
+    fill: rgba(0, 160, 255, 0.08);
+    animation: waveFlow 8s linear infinite;
+  }
+
+  .wave-2 {
+    fill: rgba(0, 120, 200, 0.06);
+    animation: waveFlow 12s linear infinite reverse;
+  }
+
+  .wave-3 {
+    fill: rgba(0, 80, 160, 0.1);
+    animation: waveFlow 6s linear infinite;
+  }
+}
+
+@keyframes waveFlow {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+/* ===== 主卡片 ===== */
+.login-card {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  width: 900px;
+  height: 540px;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow:
+    0 0 0 1px rgba(0, 180, 255, 0.2),
+    0 0 40px rgba(0, 120, 255, 0.15),
+    0 40px 80px rgba(0, 0, 0, 0.6);
+  animation: cardIn 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+@keyframes cardIn {
+  from { opacity: 0; transform: translateY(24px) scale(0.98); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* ===== 左侧品牌面板 ===== */
+.brand-panel {
+  position: relative;
+  width: 380px;
+  flex-shrink: 0;
+  background:
+    linear-gradient(160deg, #041830 0%, #062040 40%, #04111f 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 36px;
+  overflow: hidden;
+
+  /* 顶部 logo + 名称 */
+  .brand-top {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 36px;
+  }
+
+  .brand-logo {
+    width: 76px;
+    height: 76px;
+    background: rgba(0, 160, 255, 0.1);
+    border: 1px solid rgba(0, 180, 255, 0.3);
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 18px;
+    position: relative;
+
+    &::before {
+      content: '';
+      position: absolute;
+      inset: -1px;
+      border-radius: 20px;
+      background: linear-gradient(135deg, rgba(0, 200, 255, 0.5), transparent 60%);
+      z-index: -1;
+    }
+
+    .logo-img {
+      width: 44px;
+      height: 44px;
+      filter: brightness(0) invert(1);
+    }
+  }
+
+  .brand-name {
+    font-size: 18px;
+    font-weight: 700;
+    color: #fff;
+    text-align: center;
+    line-height: 1.5;
+    letter-spacing: 1px;
+    margin-bottom: 6px;
+    text-shadow: 0 0 20px rgba(0, 200, 255, 0.5);
+  }
+
+  .brand-tagline {
+    font-size: 12px;
+    color: rgba(0, 200, 255, 0.6);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+  }
+
+  /* 数据网格 */
+  .data-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    width: 100%;
+
+    .data-item {
+      background: rgba(0, 160, 255, 0.06);
+      border: 1px solid rgba(0, 180, 255, 0.15);
+      border-radius: 10px;
+      padding: 12px;
+      text-align: center;
+      transition: border-color 0.3s;
+
+      &:hover {
+        border-color: rgba(0, 200, 255, 0.4);
+      }
+
+      .data-value {
+        font-size: 20px;
+        font-weight: 700;
+        color: #00d4ff;
+        line-height: 1;
+        margin-bottom: 4px;
+        font-variant-numeric: tabular-nums;
+        text-shadow: 0 0 12px rgba(0, 212, 255, 0.6);
+      }
+
+      .data-label {
+        font-size: 11px;
+        color: rgba(255, 255, 255, 0.45);
+        letter-spacing: 1px;
+      }
+    }
+  }
+
+  /* 扫描线 */
+  .scan-line {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, rgba(0, 200, 255, 0.6), transparent);
+    animation: scanDown 4s ease-in-out infinite;
+    pointer-events: none;
+  }
+
+  @keyframes scanDown {
+    0%   { top: 0%;   opacity: 0; }
+    10%  { opacity: 1; }
+    90%  { opacity: 1; }
+    100% { top: 100%; opacity: 0; }
+  }
+
+  /* 四角装饰 */
+  .corner {
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    pointer-events: none;
+
+    &::before,
+    &::after {
+      content: '';
+      position: absolute;
+      background: rgba(0, 200, 255, 0.7);
+    }
+
+    &::before { width: 100%; height: 2px; }
+    &::after  { width: 2px; height: 100%; }
+
+    &.corner-tl { top: 12px; left: 12px;
+      &::before { top: 0; left: 0; }
+      &::after  { top: 0; left: 0; }
+    }
+    &.corner-tr { top: 12px; right: 12px;
+      &::before { top: 0; right: 0; }
+      &::after  { top: 0; right: 0; }
+    }
+    &.corner-bl { bottom: 12px; left: 12px;
+      &::before { bottom: 0; left: 0; }
+      &::after  { bottom: 0; left: 0; }
+    }
+    &.corner-br { bottom: 12px; right: 12px;
+      &::before { bottom: 0; right: 0; }
+      &::after  { bottom: 0; right: 0; }
+    }
+  }
+
+  /* 圆弧装饰 */
+  .arc-deco {
+    position: absolute;
+    border-radius: 50%;
+    border: 1px solid rgba(0, 180, 255, 0.08);
+    pointer-events: none;
+
+    &.arc-1 {
+      width: 260px;
+      height: 260px;
+      top: -80px;
+      right: -80px;
+    }
+
+    &.arc-2 {
+      width: 180px;
+      height: 180px;
+      bottom: -60px;
+      left: -60px;
+    }
+  }
+}
+
+/* ===== 右侧表单面板 ===== */
+.form-panel {
+  flex: 1;
+  background: rgba(4, 18, 34, 0.95);
+  backdrop-filter: blur(20px);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 48px 52px;
+  border-left: 1px solid rgba(0, 160, 255, 0.15);
+
+  .form-header {
+    margin-bottom: 32px;
+  }
+
+  .form-title {
+    font-size: 26px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 6px;
+    letter-spacing: 1px;
+  }
+
+  .form-subtitle {
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.35);
+    letter-spacing: 1px;
+  }
+}
+
+/* 输入框包裹 */
+.input-wrap {
+  position: relative;
+  width: 100%;
+
+  .input-icon {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 16px;
+    color: rgba(0, 200, 255, 0.5);
+    z-index: 1;
+    pointer-events: none;
+  }
+
+  :deep(.el-input__wrapper) {
+    background: rgba(0, 160, 255, 0.06);
+    border: 1px solid rgba(0, 160, 255, 0.2);
+    border-radius: 8px;
+    box-shadow: none !important;
+    padding-left: 42px;
+    transition: border-color 0.25s, background 0.25s;
+
+    &:hover {
+      border-color: rgba(0, 200, 255, 0.4);
+      background: rgba(0, 160, 255, 0.1);
+    }
+
+    &.is-focus {
+      border-color: rgba(0, 220, 255, 0.7);
+      background: rgba(0, 160, 255, 0.12);
+      box-shadow: 0 0 0 3px rgba(0, 180, 255, 0.1) !important;
+    }
+  }
+
+  :deep(.el-input__inner) {
+    color: #e0f0ff;
+    font-size: 14px;
+    height: 44px;
+
+    &::placeholder {
+      color: rgba(255, 255, 255, 0.25);
+    }
+  }
+
+  :deep(.el-input__suffix .el-icon) {
+    color: rgba(0, 200, 255, 0.4);
+  }
+}
+
+.login-form {
+  :deep(.el-form-item) {
+    margin-bottom: 18px;
+  }
+
+  :deep(.el-form-item__error) {
+    color: #ff6b6b;
+  }
+}
+
+.form-options {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+  margin-top: 4px;
+
+  :deep(.el-checkbox__label) {
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 13px;
+  }
+
+  :deep(.el-checkbox__inner) {
+    background: transparent;
+    border-color: rgba(0, 180, 255, 0.4);
+  }
+
+  :deep(.el-checkbox.is-checked .el-checkbox__inner) {
+    background: #0099e6;
+    border-color: #0099e6;
+  }
+}
+
+.login-btn {
+  width: 100%;
+  height: 46px;
+  font-size: 15px;
+  font-weight: 600;
+  border-radius: 8px;
+  letter-spacing: 3px;
+  background: linear-gradient(90deg, #0066cc, #0099e6);
+  border: none;
+  box-shadow: 0 4px 20px rgba(0, 120, 220, 0.4);
+  transition: all 0.3s;
+
+  &:hover {
+    background: linear-gradient(90deg, #0077dd, #00aaff);
+    box-shadow: 0 4px 28px rgba(0, 150, 255, 0.6);
+    transform: translateY(-1px);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+
+  .btn-text {
+    position: relative;
+    z-index: 1;
+  }
+}
+
+.default-account {
+  margin-top: 18px;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.2);
+  text-align: center;
+  letter-spacing: 1px;
+}
+
+/* 底部版权 */
+.copyright {
+  position: relative;
+  z-index: 10;
+  margin-top: 24px;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.2);
+  letter-spacing: 1px;
+}
+
+/* ===== 响应式 ===== */
+@media only screen and (max-width: $device-ipad-pro) {
+  .login-card {
+    width: 90%;
+    height: auto;
+
+    .brand-panel {
+      display: none;
+    }
+
+    .form-panel {
+      padding: 48px 40px;
+    }
+  }
+}
+
+@media only screen and (max-width: $device-phone) {
+  .login-card {
+    width: 100%;
+    border-radius: 0;
+    height: 100vh;
+    box-shadow: none;
+
+    .form-panel {
+      padding: 40px 28px;
+    }
+  }
+
+  .copyright {
+    display: none;
+  }
+}
