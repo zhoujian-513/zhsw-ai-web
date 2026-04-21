@@ -11,56 +11,66 @@ export const deviceRoutes: AppRouteRecord = {
   },
   children: [
     {
-      path: 'info',
-      name: 'DeviceInfo',
-      component: () => import('@/views/index/index.vue'),
-      meta: { title: 'menus.device.info.title' },
-      children: [
-        {
-          path: 'ledger',
-          name: 'DeviceInfoLedger',
-          component: () => import('@/views/device/info/ledger/index.vue'),
-          meta: { title: 'menus.device.info.ledger', keepAlive: true }
-        },
-        {
-          path: 'query',
-          name: 'DeviceInfoQuery',
-          component: () => import('@/views/device/info/query/index.vue'),
-          meta: { title: 'menus.device.info.query', keepAlive: true }
-        }
-      ]
+      path: 'code-config',
+      name: 'DeviceCodeConfig',
+      component: () => import('@/views/device/code-config/index.vue'),
+      meta: { title: 'menus.device.codeConfig', keepAlive: true }
+    },
+    {
+      path: 'ledger',
+      name: 'DeviceLedger',
+      component: () => import('@/views/device/ledger/index.vue'),
+      meta: { title: 'menus.device.ledger', keepAlive: true }
     },
     {
       path: 'defect',
       name: 'DeviceDefect',
+      component: () => import('@/views/device/defect/index.vue'),
+      meta: { title: 'menus.device.defect', keepAlive: true }
+    },
+    {
+      path: 'evaluation',
+      name: 'DeviceEvaluation',
+      component: () => import('@/views/device/evaluation/index.vue'),
+      meta: { title: 'menus.device.evaluation', keepAlive: true }
+    },
+    {
+      path: 'project',
+      name: 'DeviceProject',
       component: () => import('@/views/index/index.vue'),
-      meta: { title: 'menus.device.defect.title' },
+      meta: { title: 'menus.device.project' },
       children: [
         {
-          path: 'management',
-          name: 'DeviceDefectManagement',
-          component: () => import('@/views/device/defect/management/index.vue'),
-          meta: { title: 'menus.device.defect.management', keepAlive: true }
+          path: 'maintenance',
+          name: 'DeviceProjectMaintenance',
+          component: () => import('@/views/device/project/maintenance/index.vue'),
+          meta: { title: 'menus.device.maintenance', keepAlive: true }
         },
         {
-          path: 'statistics',
-          name: 'DeviceDefectStatistics',
-          component: () => import('@/views/device/defect/statistics/index.vue'),
-          meta: { title: 'menus.device.defect.statistics', keepAlive: true }
+          path: 'annual-repair',
+          name: 'DeviceProjectAnnualRepair',
+          component: () => import('@/views/device/project/annual-repair/index.vue'),
+          meta: { title: 'menus.device.annualRepair', keepAlive: true }
         },
         {
-          path: 'pipeline',
-          name: 'DeviceDefectPipeline',
-          component: () => import('@/views/device/defect/pipeline/index.vue'),
-          meta: { title: 'menus.device.defect.pipeline', keepAlive: true }
-        },
-        {
-          path: 'accident',
-          name: 'DeviceDefectAccident',
-          component: () => import('@/views/device/defect/accident/index.vue'),
-          meta: { title: 'menus.device.defect.accident', keepAlive: true }
+          path: 'overhaul',
+          name: 'DeviceProjectOverhaul',
+          component: () => import('@/views/device/project/overhaul/index.vue'),
+          meta: { title: 'menus.device.overhaul', keepAlive: true }
         }
       ]
+    },
+    {
+      path: 'regulation',
+      name: 'DeviceRegulation',
+      component: () => import('@/views/device/regulation/index.vue'),
+      meta: { title: 'menus.device.regulation', keepAlive: true }
+    },
+    {
+      path: 'analysis',
+      name: 'DeviceAnalysis',
+      component: () => import('@/views/device/analysis/index.vue'),
+      meta: { title: 'menus.device.analysis', keepAlive: true }
     }
   ]
 }

@@ -1,26 +1,28 @@
 import { AppRouteRecord } from '@/types/router'
 import { workbenchRoutes } from './workbench'
+import { organizationTemplateRoutes } from './organization-template'
+import { permissionTemplateRoutes } from './permission-template'
+import { dashboardRoutes } from './dashboard'
 import { deviceRoutes } from './device'
 import { monitorRoutes } from './monitor'
 import { productionRoutes } from './production'
-import { planningRoutes } from './planning'
 import { safetyRoutes } from './safety'
 import { materialRoutes } from './material'
+import { operationRoutes } from './operation'
 import { pipelineRoutes } from './pipeline'
 import { aiAssistantRoutes } from './ai-assistant'
-import { reportRoutes } from './report'
-import { systemRoutes } from './system'
 
 export const routeModules: AppRouteRecord[] = [
   workbenchRoutes,
+  dashboardRoutes,
   deviceRoutes,
   monitorRoutes,
   productionRoutes,
-  planningRoutes,
   safetyRoutes,
   materialRoutes,
+  operationRoutes,
   pipelineRoutes,
   aiAssistantRoutes,
-  reportRoutes,
-  systemRoutes
+  organizationTemplateRoutes,
+  permissionTemplateRoutes,
 ]
