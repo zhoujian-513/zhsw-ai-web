@@ -11,6 +11,12 @@ export const reportRoutes: AppRouteRecord = {
   },
   children: [
     {
+      path: 'production-query',
+      name: 'ReportProductionQuery',
+      component: () => import('@/views/report/production-query/index.vue'),
+      meta: { title: 'menus.report.productionQuery', keepAlive: true }
+    },
+    {
       path: 'production',
       name: 'ReportProduction',
       component: () => import('@/views/report/production/index.vue'),

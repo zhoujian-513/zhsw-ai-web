@@ -11,6 +11,12 @@ export const planningRoutes: AppRouteRecord = {
   },
   children: [
     {
+      path: 'project',
+      name: 'PlanningProject',
+      component: () => import('@/views/planning/project/index.vue'),
+      meta: { title: 'menus.planning.project', keepAlive: true }
+    },
+    {
       path: 'budget',
       name: 'PlanningBudget',
       component: () => import('@/views/planning/budget/index.vue'),

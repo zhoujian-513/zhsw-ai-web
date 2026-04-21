@@ -18,59 +18,43 @@ export const shareablePages = [
   },
 
   // ==================== 设备管理 ====================
+  // 设备信息管理
   {
-    name: '设备编码配置',
-    path: '/device/code-config',
+    name: '设施/设备信息台账管理',
+    path: '/device/info/ledger',
     icon: '&#xe8b5;',
-    description: '设备编码规则配置'
+    description: '设施/设备信息台账管理'
   },
   {
-    name: '设备台账',
-    path: '/device/ledger',
+    name: '设施/设备综合查询',
+    path: '/device/info/query',
     icon: '&#xe8b5;',
-    description: '设备台账管理'
+    description: '设施/设备综合查询'
+  },
+  // 缺陷/事故管理
+  {
+    name: '缺陷管理',
+    path: '/device/defect/management',
+    icon: '&#xe8b5;',
+    description: '缺陷管理'
   },
   {
-    name: '设备缺陷',
-    path: '/device/defect',
+    name: '缺陷统计填报',
+    path: '/device/defect/statistics',
     icon: '&#xe8b5;',
-    description: '设备缺陷管理'
+    description: '缺陷统计填报'
   },
   {
-    name: '设备评价',
-    path: '/device/evaluation',
+    name: '管线缺陷管理',
+    path: '/device/defect/pipeline',
     icon: '&#xe8b5;',
-    description: '设备健康评价'
+    description: '管线缺陷管理'
   },
   {
-    name: '设备检修-日常维护',
-    path: '/device/project/maintenance',
+    name: '设备事故查询',
+    path: '/device/defect/accident',
     icon: '&#xe8b5;',
-    description: '设备日常维护管理'
-  },
-  {
-    name: '设备检修-年度检修',
-    path: '/device/project/annual-repair',
-    icon: '&#xe8b5;',
-    description: '设备年度检修管理'
-  },
-  {
-    name: '设备检修-大修管理',
-    path: '/device/project/overhaul',
-    icon: '&#xe8b5;',
-    description: '设备大修项目管理'
-  },
-  {
-    name: '设备规程',
-    path: '/device/regulation',
-    icon: '&#xe8b5;',
-    description: '设备操作规程管理'
-  },
-  {
-    name: '设备分析',
-    path: '/device/analysis',
-    icon: '&#xe8b5;',
-    description: '设备运行分析'
+    description: '设备事故查询'
   },
 
   // ==================== 监测中心 ====================
@@ -150,6 +134,12 @@ export const shareablePages = [
   },
 
   // ==================== 计划经营 ====================
+  {
+    name: '项目管理',
+    path: '/planning/project',
+    icon: '&#xe6e7;',
+    description: '项目管理'
+  },
   {
     name: '预算管理',
     path: '/planning/budget',
@@ -293,6 +283,12 @@ export const shareablePages = [
 
   // ==================== 报表中心 ====================
   {
+    name: '生产数据查询',
+    path: '/report/production-query',
+    icon: '&#xe6e6;',
+    description: '生产数据查询'
+  },
+  {
     name: '生产报表',
     path: '/report/production',
     icon: '&#xe6e6;',
@@ -319,6 +315,12 @@ export const shareablePages = [
 
   // ==================== 系统管理 ====================
   {
+    name: '组织管理',
+    path: '/system/organization-management',
+    icon: '&#xe6e8;',
+    description: '组织管理'
+  },
+  {
     name: '用户管理',
     path: '/system/user',
     icon: '&#xe6e8;',
@@ -335,12 +337,6 @@ export const shareablePages = [
     path: '/system/menu',
     icon: '&#xe6e8;',
     description: '系统菜单配置'
-  },
-  {
-    name: '组织架构',
-    path: '/system/organization',
-    icon: '&#xe6e8;',
-    description: '组织架构管理'
   },
   {
     name: '日志管理',

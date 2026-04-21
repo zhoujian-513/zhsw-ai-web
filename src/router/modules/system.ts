@@ -11,6 +11,12 @@ export const systemRoutes: AppRouteRecord = {
   },
   children: [
     {
+      path: 'organization',
+      name: 'SystemOrganizationManagement',
+      component: () => import('@/views/system/organization-management/index.vue'),
+      meta: { title: 'menus.system.organizationManagement', keepAlive: true }
+    },
+    {
       path: 'user',
       name: 'SystemUser',
       component: () => import('@/views/system/user/index.vue'),
@@ -27,12 +33,6 @@ export const systemRoutes: AppRouteRecord = {
       name: 'SystemMenu',
       component: () => import('@/views/system/menu/index.vue'),
       meta: { title: 'menus.system.menu', keepAlive: true }
-    },
-    {
-      path: 'organization',
-      name: 'SystemOrganization',
-      component: () => import('@/views/system/organization/index.vue'),
-      meta: { title: 'menus.system.organization', keepAlive: true }
     },
     {
       path: 'log',
