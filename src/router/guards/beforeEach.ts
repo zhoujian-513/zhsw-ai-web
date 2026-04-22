@@ -31,6 +31,9 @@ const pendingLoading = ref(false)
  */
 function buildMenuTreeFromRoutes(router: Router): AppRouteRecord[] {
   const allRoutes = router.getRoutes()
+  
+  console.log('[菜单调试] 所有路由数量:', allRoutes.length)
+  console.log('[菜单调试] 所有路由路径:', allRoutes.map(r => r.path))
 
   // 静态路由名称列表（不应出现在菜单中的路由）
   const staticRouteNames = ['Login', 'Exception403', 'Exception404', 'Exception500']
@@ -49,6 +52,9 @@ function buildMenuTreeFromRoutes(router: Router): AppRouteRecord[] {
     const pathSegments = route.path.split('/').filter(Boolean)
     return pathSegments.length === 1
   })
+  
+  console.log('[菜单调试] 顶层路由数量:', topLevelRoutes.length)
+  console.log('[菜单调试] 顶层路由:', topLevelRoutes.map(r => ({ path: r.path, name: r.name })))
 
   // 构建路由树结构
   const menuTree: AppRouteRecord[] = []
@@ -59,6 +65,8 @@ function buildMenuTreeFromRoutes(router: Router): AppRouteRecord[] {
       menuTree.push(menuItem)
     }
   }
+  
+  console.log('[菜单调试] 菜单树:', JSON.stringify(menuTree.map(m => ({ path: m.path, name: m.name, children: m.children?.map(c => c.path) })), null, 2))
 
   return menuTree
 }
@@ -85,6 +93,10 @@ function buildMenuItemFromRoute(route: any, allRoutes: any[]): AppRouteRecord | 
     // 只取直接子路由（不包含更深层的路由）
     return !relativePath.includes('/')
   })
+  
+  if (route.path === '/safety') {
+    console.log('[菜单调试] /safety 的子路由:', children.map(r => ({ path: r.path, name: r.name })))
+  }
 
   if (children.length > 0) {
     menuItem.children = children
@@ -177,6 +189,7 @@ async function handleRouteGuard(
     // 设置菜单数据（从已注册的路由构建，确保路径完整）
     const menuStore = useMenuStore()
     const menuTree = buildMenuTreeFromRoutes(router)
+    console.log('[菜单调试] 最终菜单树:', menuTree)
     menuStore.setMenuList(menuTree)
   }
 
