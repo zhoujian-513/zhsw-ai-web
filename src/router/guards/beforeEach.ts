@@ -31,6 +31,9 @@ const pendingLoading = ref(false)
  */
 function buildMenuTreeFromRoutes(router: Router): AppRouteRecord[] {
   const allRoutes = router.getRoutes()
+  
+  // 调试：打印所有路由路径
+  console.log('[路由调试] 所有路由路径:', allRoutes.map(r => ({ path: r.path, name: r.name })))
 
   // 静态路由名称列表（不应出现在菜单中的路由）
   const staticRouteNames = ['Login', 'Exception403', 'Exception404', 'Exception500']
@@ -49,6 +52,9 @@ function buildMenuTreeFromRoutes(router: Router): AppRouteRecord[] {
     const pathSegments = route.path.split('/').filter(Boolean)
     return pathSegments.length === 1
   })
+  
+  // 调试：打印顶层路由
+  console.log('[路由调试] 顶层路由:', topLevelRoutes.map(r => ({ path: r.path, name: r.name })))
 
   // 构建路由树结构
   const menuTree: AppRouteRecord[] = []
@@ -59,6 +65,9 @@ function buildMenuTreeFromRoutes(router: Router): AppRouteRecord[] {
       menuTree.push(menuItem)
     }
   }
+  
+  // 调试：打印菜单树
+  console.log('[路由调试] 菜单树:', JSON.stringify(menuTree, null, 2))
 
   return menuTree
 }
@@ -75,9 +84,9 @@ function buildMenuItemFromRoute(route: any, allRoutes: any[]): AppRouteRecord | 
     meta: route.meta || {}
   }
 
-  // 查找子路由
+  // 查找子路由 - 修改逻辑以支持多级子路由
   const children = allRoutes.filter(r => {
-    // 子路由的路径应该以父路径开头，且比父路径多一层
+    // 子路由的路径应该以父路径开头
     if (!r.path.startsWith(route.path + '/')) {
       return false
     }
@@ -85,6 +94,11 @@ function buildMenuItemFromRoute(route: any, allRoutes: any[]): AppRouteRecord | 
     // 只取直接子路由（不包含更深层的路由）
     return !relativePath.includes('/')
   })
+  
+  // 调试：打印子路由查找结果
+  if (route.path === '/safety') {
+    console.log('[路由调试] /safety 的子路由:', children.map(r => ({ path: r.path, name: r.name })))
+  }
 
   if (children.length > 0) {
     menuItem.children = children
@@ -247,6 +261,27 @@ function isRouteInStaticRoutes(path: string): boolean {
 }
 
 /**
+ * 处理未授权错误
+ */
+function isUnauthorizedError(error: unknown): boolean {
+  if (error instanceof HttpError) {
+    return error.status === ApiStatus.UNAUTHORIZED
+  }
+  return false
+}
+
+/**
+ * 处理根路径重定向
+ */
+function handleRootPathRedirect(to: RouteLocationNormalized, next: NavigationGuardNext): boolean {
+  if (to.path === '/') {
+    next({ path: useCommon().homePath.value })
+    return true
+  }
+  return false
+}
+
+/**
  * 处理动态路由注册
  */
 async function handleDynamicRoutes(
@@ -255,215 +290,50 @@ async function handleDynamicRoutes(
   next: NavigationGuardNext,
   router: Router
 ): Promise<void> {
-  // 显示 loading 并标记 pending
-  pendingLoading.value = true
-  loadingService.showLoading()
+  const menuStore = useMenuStore()
+  const userStore = useUserStore()
 
   try {
-    // 获取用户信息
-    await fetchUserInfoIfNeeded(from)
+    // 获取用户信息和菜单
+    const userInfoRes = await fetchGetUserInfo()
 
-    // 获取菜单数据并注册路由
-    await getMenuData(router)
-
-    // 处理根路径跳转
-    if (handleRootPathRedirect(to, next)) {
-      return
+    if (userInfoRes.code !== ApiStatus.SUCCESS) {
+      throw new HttpError(userInfoRes.code, userInfoRes.message || '获取用户信息失败')
     }
 
-    next({
-      path: to.path,
-      query: to.query,
-      hash: to.hash,
-      replace: true
-    })
+    const { menuList, userInfo } = userInfoRes.data
+
+    if (!menuList || menuList.length === 0) {
+      throw new HttpError(ApiStatus.ERROR, '菜单列表为空')
+    }
+
+    // 设置用户信息
+    userStore.setUserInfo(userInfo)
+
+    // 转换菜单数据为路由配置
+    const asyncRoutesFromMenu = menuDataToRouter(menuList)
+
+    // 注册动态路由
+    registerDynamicRoutes(router, asyncRoutesFromMenu)
+
+    // 设置菜单列表
+    menuStore.setMenuList(menuList)
+
+    // 标记路由已注册
+    isRouteRegistered.value = true
+
+    // 重新导航到目标路由
+    next({ ...to, replace: true })
   } catch (error) {
     console.error('动态路由注册失败:', error)
-    // 401 错误：axios 拦截器已处理退出登录，取消当前导航即可
-    if (isUnauthorizedError(error)) {
-      next(false)
-      return
+
+    // 如果是 HTTP 错误，直接抛出由上层处理
+    if (isHttpError(error)) {
+      throw error
     }
 
-    // 其他错误：标记路由已注册（避免无限重试）
-    isRouteRegistered.value = true
-    next({ name: 'Exception500' })
+    // 其他错误，清除登录状态并跳转到登录页
+    userStore.logOut()
+    next({ name: 'Login' })
   }
-}
-
-/**
- * 获取菜单数据
- */
-async function getMenuData(router: Router): Promise<void> {
-  if (useCommon().isFrontendMode.value) {
-    await processFrontendMenu(router)
-  } else {
-    await processBackendMenu(router)
-  }
-}
-
-/**
- * 处理前端控制模式的菜单逻辑
- */
-async function processFrontendMenu(router: Router): Promise<void> {
-  const menuList = asyncRoutes.map((route) => menuDataToRouter(route))
-  const userStore = useUserStore()
-  const userRoles = userStore.info.roles
-
-  if (!userRoles) {
-    throw new Error('获取用户角色失败')
-  }
-
-  // 将角色对象数组转换为角色代码数组
-  const roles = userRoles.map((role) => role.code)
-
-  const filteredMenuList = filterMenuByRoles(menuList, roles)
-
-  await registerAndStoreMenu(router, filteredMenuList)
-}
-
-/**
- * 处理后端控制模式的菜单逻辑
- * 注意：Mock 模式下不使用此函数
- */
-async function processBackendMenu(router: Router): Promise<void> {
-  // Mock 模式下已移除后端 API，此函数不应被调用
-  throw new Error('后端菜单功能已移除，请使用 Mock 模式')
-}
-
-/**
- * 递归过滤空菜单项
- */
-function filterEmptyMenus(menuList: AppRouteRecord[]): AppRouteRecord[] {
-  return menuList
-    .map((item) => {
-      // 如果有子菜单，先递归过滤子菜单
-      if (item.children && item.children.length > 0) {
-        const filteredChildren = filterEmptyMenus(item.children)
-        return {
-          ...item,
-          children: filteredChildren
-        }
-      }
-      return item
-    })
-    .filter((item) => {
-      // 如果定义了 children 属性（即使是空数组），说明这是一个目录菜单，应该保留
-      if ('children' in item) {
-        return true
-      }
-
-      // 如果有外链或 iframe，保留
-      if (item.meta?.isIframe === true || item.meta?.link) {
-        return true
-      }
-
-      // 如果有有效的 component，保留
-      if (item.component && item.component !== '' && item.component !== RoutesAlias.Layout) {
-        return true
-      }
-
-      // 其他情况过滤掉
-      return false
-    })
-}
-
-/**
- * 注册路由并存储菜单数据
- */
-async function registerAndStoreMenu(router: Router, menuList: AppRouteRecord[]): Promise<void> {
-  if (!isValidMenuList(menuList)) {
-    throw new Error('获取菜单列表失败，请重新登录')
-  }
-  const menuStore = useMenuStore()
-  // 递归过滤掉为空的菜单项
-  const list = filterEmptyMenus(menuList)
-  menuStore.setMenuList(list)
-  registerDynamicRoutes(router, list)
-  isRouteRegistered.value = true
-  useWorktabStore().validateWorktabs(router)
-}
-
-/**
- * 根据角色过滤菜单
- */
-const filterMenuByRoles = (menu: AppRouteRecord[], roles: string[]): AppRouteRecord[] => {
-  return menu.reduce((acc: AppRouteRecord[], item) => {
-    const itemRoles = item.meta?.roles
-    const hasPermission = !itemRoles || itemRoles.some((role) => roles?.includes(role))
-
-    if (hasPermission) {
-      const filteredItem = { ...item }
-      if (filteredItem.children?.length) {
-        filteredItem.children = filterMenuByRoles(filteredItem.children, roles)
-      }
-      acc.push(filteredItem)
-    }
-
-    return acc
-  }, [])
-}
-
-/**
- * 验证菜单列表是否有效
- */
-function isValidMenuList(menuList: AppRouteRecord[]): boolean {
-  return Array.isArray(menuList) && menuList.length > 0
-}
-
-/**
- * 重置路由相关状态
- */
-export function resetRouterState(): void {
-  isRouteRegistered.value = false
-  const menuStore = useMenuStore()
-  menuStore.removeAllDynamicRoutes()
-  menuStore.setMenuList([])
-}
-
-/**
- * 处理根路径跳转到首页
- */
-function handleRootPathRedirect(to: RouteLocationNormalized, next: NavigationGuardNext): boolean {
-  if (to.path === '/') {
-    const USE_MOCK = import.meta.env.VITE_USE_MOCK === 'true'
-
-    // Mock 模式：直接跳转到工作台
-    if (USE_MOCK) {
-      next({ path: '/workbench', replace: true })
-      return true
-    }
-
-    // 非 Mock 模式：使用动态首页路径
-    const { homePath } = useCommon()
-    if (homePath.value && homePath.value !== '/') {
-      next({ path: homePath.value, replace: true })
-      return true
-    }
-  }
-  return false
-}
-
-/**
- * 获取用户信息（如果需要）
- */
-async function fetchUserInfoIfNeeded(from: RouteLocationNormalized): Promise<void> {
-  const userStore = useUserStore()
-  const isRefresh = from.path === '/'
-  const needFetch = isRefresh || !userStore.info || Object.keys(userStore.info).length === 0
-
-  if (needFetch) {
-    const { code, data } = await fetchGetUserInfo()
-    // 从响应对象中提取用户信息
-    if (code === 200 && data) {
-      userStore.setUserInfo(data)
-    }
-  }
-}
-
-/**
- * 判断是否为未授权错误（401）
- */
-function isUnauthorizedError(error: unknown): error is HttpError {
-  return isHttpError(error) && error.code === ApiStatus.unauthorized
 }
