@@ -156,6 +156,14 @@
   )
   const isDualMenu = computed(() => menuType.value === MenuTypeEnum.DUAL_MENU)
 
+  // 在组件挂载时输出调试信息
+  onMounted(() => {
+    console.log('[菜单组件调试] 组件已挂载')
+    console.log('[菜单组件调试] showLeftMenu:', showLeftMenu.value)
+    console.log('[菜单组件调试] isDualMenu:', isDualMenu.value)
+    console.log('[菜单组件调试] menuType:', menuType.value)
+  })
+
   // 路由相关
   const firstLevelMenuPath = computed(() => route.matched[0]?.path)
   const routerPath = computed(() => String(route.meta.activePath || route.path))
