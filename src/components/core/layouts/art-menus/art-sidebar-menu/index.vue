@@ -169,8 +169,15 @@
     const menuStore = useMenuStore()
     const allMenus = menuStore.menuList
 
+    console.log('[菜单组件调试] 当前路径:', route.path)
+    console.log('[菜单组件调试] 菜单类型:', menuType.value)
+    console.log('[菜单组件调试] isTopLeftMenu:', isTopLeftMenu.value)
+    console.log('[菜单组件调试] isDualMenu:', isDualMenu.value)
+    console.log('[菜单组件调试] allMenus数量:', allMenus.length)
+
     // 如果不是顶部左侧菜单或双列菜单，直接返回完整菜单列表
     if (!isTopLeftMenu.value && !isDualMenu.value) {
+      console.log('[菜单组件调试] 返回完整菜单列表')
       return allMenus
     }
 
@@ -182,15 +189,24 @@
     // 获取当前顶级路径
     const currentTopPath = `/${route.path.split('/')[1]}`
 
+    console.log('[菜单组件调试] currentTopPath:', currentTopPath)
+
     // 如果当前路径就是顶级路径（没有子路径），返回空数组
     if (route.path === currentTopPath || route.path === `${currentTopPath}/`) {
+      console.log('[菜单组件调试] 当前路径是顶级路径，返回空数组')
       return []
     }
 
     // 返回当前顶级路径对应的子菜单
     const currentMenu = allMenus.find((menu) => menu.path === currentTopPath)
+    console.log('[菜单组件调试] 找到的子菜单:', currentMenu?.children?.map(c => c.path))
     return currentMenu?.children ?? []
   })
+
+  // 监听 menuList 变化
+  watch(menuList, (newVal) => {
+    console.log('[菜单组件调试] menuList 变化:', newVal.length, newVal.map(m => m.path))
+  }, { immediate: true })
 
   /**
    * 检查是否为移动端屏幕
@@ -246,27 +262,6 @@
    */
   const toggleMenuVisibility = (): void => {
     settingStore.setMenuOpen(!menuOpen.value)
-
-    // 移动端模态框控制逻辑
-    if (isMobileScreen()) {
-      if (!menuOpen.value) {
-        // 菜单即将打开，立即显示模态框
-        showMobileModal.value = true
-      } else {
-        // 菜单即将关闭，延迟隐藏模态框确保动画完成
-        delayHideMobileModal()
-      }
-    }
-  }
-
-  /**
-   * 处理菜单关闭（来自子组件）
-   */
-  const handleMenuClose = (): void => {
-    if (isMobileScreen()) {
-      settingStore.setMenuOpen(false)
-      delayHideMobileModal()
-    }
   }
 
   /**
@@ -277,78 +272,65 @@
   }
 
   /**
-   * 处理屏幕尺寸变化
+   * 处理菜单关闭
    */
-  const handleScreenResize = (): void => {
-    // 小屏幕自动折叠菜单
-    if (currentScreenWidth.value < MOBILE_BREAKPOINT) {
+  const handleMenuClose = (): void => {
+    if (isMobileMode.value) {
       settingStore.setMenuOpen(false)
-      // 在小屏幕上，如果菜单关闭则隐藏模态框
-      if (!menuOpen.value) {
-        showMobileModal.value = false
+      delayHideMobileModal()
+    }
+  }
+
+  /**
+   * 处理窗口大小变化
+   */
+  const handleResize = (): void => {
+    const width = document.body.clientWidth
+    currentScreenWidth.value = width
+
+    if (width < MOBILE_BREAKPOINT) {
+      if (!isMobileMode.value) {
+        isMobileMode.value = true
+        settingStore.setMenuOpen(false)
       }
     } else {
-      // 大屏幕上始终隐藏模态框
-      showMobileModal.value = false
-    }
-  }
-
-  /**
-   * 设置窗口大小监听器
-   */
-  const setupWindowResizeListener = (): void => {
-    currentScreenWidth.value = document.body.clientWidth
-    handleScreenResize()
-
-    window.onresize = () => {
-      currentScreenWidth.value = document.body.clientWidth
-      handleScreenResize()
-    }
-  }
-
-  /**
-   * 监听菜单开关状态变化
-   */
-  watch(
-    () => menuOpen.value,
-    (isMenuOpen: boolean) => {
-      if (!isMobileScreen()) {
-        // 大屏幕设备上，模态框始终隐藏
-        showMobileModal.value = false
-      } else {
-        // 小屏幕设备上，根据菜单状态控制模态框
-        if (isMenuOpen) {
-          // 菜单打开时立即显示模态框
-          showMobileModal.value = true
-        } else {
-          // 菜单关闭时延迟隐藏模态框，确保动画完成
-          delayHideMobileModal()
-        }
+      if (isMobileMode.value) {
+        isMobileMode.value = false
+        settingStore.setMenuOpen(true)
       }
     }
-  )
+  }
 
+  /**
+   * 初始化移动端状态
+   */
+  const initMobileState = (): void => {
+    if (isMobileScreen()) {
+      isMobileMode.value = true
+      settingStore.setMenuOpen(false)
+    }
+  }
+
+  // 监听菜单开启状态变化
+  watch(menuOpen, (newValue: boolean) => {
+    if (isMobileMode.value) {
+      showMobileModal.value = newValue
+    }
+  })
+
+  // 组件挂载时初始化
   onMounted(() => {
-    setupWindowResizeListener()
+    handleResize()
+    window.addEventListener('resize', handleResize)
+    initMobileState()
+  })
+
+  // 组件卸载时清理
+  onUnmounted(() => {
+    window.removeEventListener('resize', handleResize)
   })
 </script>
 
 <style lang="scss" scoped>
   @use './style';
-</style>
-
-<style lang="scss">
-  @use './theme';
-
-  .layout-sidebar {
-    // 展开的宽度
-    .el-menu:not(.el-menu--collapse) {
-      width: v-bind(menuopenwidth);
-    }
-
-    // 折叠后宽度
-    .el-menu--collapse {
-      width: v-bind(menuclosewidth);
-    }
-  }
 </style>
