@@ -351,7 +351,7 @@ export const safetyRoutes: AppRouteRecord = {
         {
           path: 'emergency-repair',
           name: 'SafetyEmergencyEmergencyRepair',
-          component: () => import('@/views/safety/emergency/emergency-repair.vue'),
+          component: () => import('@/views/safety/emergency-repair/index.vue'),
           meta: { title: '应急抢修' }
         },
         {
