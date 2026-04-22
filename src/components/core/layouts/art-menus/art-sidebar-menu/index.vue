@@ -139,6 +139,9 @@
 
   const { getMenuOpenWidth, menuType, uniqueOpened, dualMenuShowText, menuOpen, getMenuTheme, frameworkType } =
     storeToRefs(settingStore)
+  
+  // 使用 storeToRefs 解构 menuStore 的 menuList
+  const { menuList: storeMenuList } = storeToRefs(menuStore)
 
   // 组件内部状态
   const defaultOpenedMenus = ref<string[]>([])
@@ -163,8 +166,8 @@
     console.log('[菜单组件调试] showLeftMenu:', showLeftMenu.value)
     console.log('[菜单组件调试] isDualMenu:', isDualMenu.value)
     console.log('[菜单组件调试] menuType:', menuType.value)
-    console.log('[菜单组件调试] menuStore.menuList:', menuStore.menuList)
-    console.log('[菜单组件调试] menuStore.menuList长度:', menuStore.menuList.length)
+    console.log('[菜单组件调试] storeMenuList:', storeMenuList.value)
+    console.log('[菜单组件调试] storeMenuList长度:', storeMenuList.value.length)
   })
 
   // 路由相关
@@ -173,11 +176,11 @@
 
   // 菜单数据
   const firstLevelMenus = computed(() => {
-    return menuStore.menuList.filter((menu) => !menu.meta.isHide)
+    return storeMenuList.value.filter((menu) => !menu.meta.isHide)
   })
 
   const menuList = computed(() => {
-    const allMenus = menuStore.menuList
+    const allMenus = storeMenuList.value
 
     console.log('[菜单组件调试] menuList计算属性执行')
     console.log('[菜单组件调试] 当前路径:', route.path)
@@ -219,9 +222,9 @@
     console.log('[菜单组件调试] menuList 变化:', newVal.length, newVal.map(m => m.path))
   }, { immediate: true })
 
-  // 监听 menuStore.menuList 变化
-  watch(() => menuStore.menuList, (newVal) => {
-    console.log('[菜单组件调试] menuStore.menuList 变化:', newVal.length)
+  // 监听 storeMenuList 变化
+  watch(storeMenuList, (newVal) => {
+    console.log('[菜单组件调试] storeMenuList 变化:', newVal.length)
   }, { immediate: true })
 
   /**
