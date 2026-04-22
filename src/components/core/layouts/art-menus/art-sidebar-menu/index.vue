@@ -135,6 +135,7 @@
   const route = useRoute()
   const router = useRouter()
   const settingStore = useSettingStore()
+  const menuStore = useMenuStore()
 
   const { getMenuOpenWidth, menuType, uniqueOpened, dualMenuShowText, menuOpen, getMenuTheme, frameworkType } =
     storeToRefs(settingStore)
@@ -162,6 +163,8 @@
     console.log('[菜单组件调试] showLeftMenu:', showLeftMenu.value)
     console.log('[菜单组件调试] isDualMenu:', isDualMenu.value)
     console.log('[菜单组件调试] menuType:', menuType.value)
+    console.log('[菜单组件调试] menuStore.menuList:', menuStore.menuList)
+    console.log('[菜单组件调试] menuStore.menuList长度:', menuStore.menuList.length)
   })
 
   // 路由相关
@@ -170,13 +173,13 @@
 
   // 菜单数据
   const firstLevelMenus = computed(() => {
-    return useMenuStore().menuList.filter((menu) => !menu.meta.isHide)
+    return menuStore.menuList.filter((menu) => !menu.meta.isHide)
   })
 
   const menuList = computed(() => {
-    const menuStore = useMenuStore()
     const allMenus = menuStore.menuList
 
+    console.log('[菜单组件调试] menuList计算属性执行')
     console.log('[菜单组件调试] 当前路径:', route.path)
     console.log('[菜单组件调试] 菜单类型:', menuType.value)
     console.log('[菜单组件调试] isTopLeftMenu:', isTopLeftMenu.value)
@@ -185,7 +188,7 @@
 
     // 如果不是顶部左侧菜单或双列菜单，直接返回完整菜单列表
     if (!isTopLeftMenu.value && !isDualMenu.value) {
-      console.log('[菜单组件调试] 返回完整菜单列表')
+      console.log('[菜单组件调试] 返回完整菜单列表, 数量:', allMenus.length)
       return allMenus
     }
 
@@ -214,6 +217,11 @@
   // 监听 menuList 变化
   watch(menuList, (newVal) => {
     console.log('[菜单组件调试] menuList 变化:', newVal.length, newVal.map(m => m.path))
+  }, { immediate: true })
+
+  // 监听 menuStore.menuList 变化
+  watch(() => menuStore.menuList, (newVal) => {
+    console.log('[菜单组件调试] menuStore.menuList 变化:', newVal.length)
   }, { immediate: true })
 
   /**
