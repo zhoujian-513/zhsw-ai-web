@@ -251,7 +251,7 @@ function isRouteInStaticRoutes(path: string): boolean {
  */
 function isUnauthorizedError(error: unknown): boolean {
   if (error instanceof HttpError) {
-    return error.status === ApiStatus.UNAUTHORIZED
+    return error.code === ApiStatus.unauthorized
   }
   return false
 }
@@ -283,21 +283,21 @@ async function handleDynamicRoutes(
     // 获取用户信息和菜单
     const userInfoRes = await fetchGetUserInfo()
 
-    if (userInfoRes.code !== ApiStatus.SUCCESS) {
-      throw new HttpError(userInfoRes.code, userInfoRes.message || '获取用户信息失败')
+    if (userInfoRes.code !== ApiStatus.success) {
+      throw new HttpError(userInfoRes.message || '获取用户信息失败', userInfoRes.code)
     }
 
     const { menuList, userInfo } = userInfoRes.data
 
     if (!menuList || menuList.length === 0) {
-      throw new HttpError(ApiStatus.ERROR, '菜单列表为空')
+      throw new HttpError('菜单列表为空', ApiStatus.error)
     }
 
     // 设置用户信息
     userStore.setUserInfo(userInfo)
 
     // 转换菜单数据为路由配置
-    const asyncRoutesFromMenu = menuDataToRouter(menuList)
+    const asyncRoutesFromMenu = menuList.map((route: AppRouteRecord) => menuDataToRouter(route))
 
     // 注册动态路由
     registerDynamicRoutes(router, asyncRoutesFromMenu)
@@ -322,4 +322,12 @@ async function handleDynamicRoutes(
     userStore.logOut()
     next({ name: 'Login' })
   }
+}
+
+/**
+ * 重置路由状态
+ * 用于用户登出时重置路由注册状态
+ */
+export function resetRouterState(): void {
+  isRouteRegistered.value = false
 }
