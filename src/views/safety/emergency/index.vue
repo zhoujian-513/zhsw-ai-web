@@ -1,25 +1,45 @@
-<template>
+﻿<template>
   <div class="page-container">
-    <ElCard shadow="never">
-      <template #header><span>应急预案</span></template>
-      <ElTable :data="tableData" border stripe>
-        <ElTableColumn prop="id" label="预案编号" width="120" />
-        <ElTableColumn prop="name" label="预案名称" />
-        <ElTableColumn prop="type" label="预案类型" />
-        <ElTableColumn prop="level" label="响应级别" />
-        <ElTableColumn prop="updateDate" label="更新日期" />
-        <ElTableColumn label="操作" width="150">
-          <template #default><ElButton type="primary" size="small">查看</ElButton></template>
-        </ElTableColumn>
-      </ElTable>
-    </ElCard>
+    <div class="placeholder-content">
+      <p class="page-title">{{ title }}</p>
+      <p class="page-desc">页面开发中...</p>
+    </div>
   </div>
 </template>
+
 <script setup lang="ts">
-defineOptions({ name: 'SafetyEmergency' })
-const tableData = [
-  { id: 'YA001', name: '供水突发事件应急预案', type: '综合预案', level: 'Ⅱ级', updateDate: '2024-01-15' },
-  { id: 'YA002', name: '水质污染应急预案', type: '专项预案', level: 'Ⅰ级', updateDate: '2024-02-10' },
-  { id: 'YA003', name: '设备故障应急预案', type: '现场处置方案', level: 'Ⅲ级', updateDate: '2024-03-01' },
-]
+import { computed } from 'vue'
+import { useRoute } from 'vue-router'
+
+const route = useRoute()
+const title = computed(() => route.meta.title || '页面')
 </script>
+
+<style lang="scss" scoped>
+.page-container {
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 140px);
+  overflow: hidden;
+  padding: 0;
+
+  .placeholder-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #909399;
+
+    .page-title {
+      font-size: 24px;
+      font-weight: 500;
+      margin-bottom: 12px;
+    }
+
+    .page-desc {
+      font-size: 14px;
+    }
+  }
+}
+</style>

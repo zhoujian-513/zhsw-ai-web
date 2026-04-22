@@ -1,36 +1,45 @@
-<template>
+﻿<template>
   <div class="page-container">
-    <ElCard>
-      <template #header>
-        <div class="card-header">
-          <span>角色管理</span>
-        </div>
-      </template>
-      <div class="content">
-        <ElEmpty description="角色管理功能开发中..." />
-      </div>
-    </ElCard>
+    <div class="placeholder-content">
+      <p class="page-title">{{ title }}</p>
+      <p class="page-desc">页面开发中...</p>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
-defineOptions({ name: 'SystemRole' })
+import { computed } from 'vue'
+import { useRoute } from 'vue-router'
+
+const route = useRoute()
+const title = computed(() => route.meta.title || '页面')
 </script>
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
 .page-container {
-  padding: 20px;
-}
-
-.card-header {
-  font-size: 16px;
-  font-weight: bold;
-}
-
-.content {
-  min-height: 400px;
   display: flex;
-  align-items: center;
-  justify-content: center;
+  flex-direction: column;
+  height: calc(100vh - 140px);
+  overflow: hidden;
+  padding: 0;
+
+  .placeholder-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #909399;
+
+    .page-title {
+      font-size: 24px;
+      font-weight: 500;
+      margin-bottom: 12px;
+    }
+
+    .page-desc {
+      font-size: 14px;
+    }
+  }
 }
 </style>

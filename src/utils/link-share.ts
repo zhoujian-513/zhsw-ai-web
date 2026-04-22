@@ -9,18 +9,160 @@ import { ElMessage } from 'element-plus'
  * 定义所有可分享的页面
  */
 export const shareablePages = [
-  // ==================== 驾驶舱 ====================
+  // ==================== 工作台 ====================
   {
-    name: '集团看板',
-    path: '/dashboard/group',
+    name: '工作台',
+    path: '/workbench',
     icon: '&#xe81a;',
-    description: '集团数据总览看板'
+    description: '个人工作台首页'
+  },
+
+  // ==================== 设备管理 ====================
+  // 设备信息管理
+  {
+    name: '设施/设备信息台账管理',
+    path: '/device/info/ledger',
+    icon: '&#xe8b5;',
+    description: '设施/设备信息台账管理'
   },
   {
-    name: '数据对比',
-    path: '/dashboard/compare',
-    icon: '&#xe81a;',
-    description: '多维度数据对比分析'
+    name: '设施/设备综合查询',
+    path: '/device/info/query',
+    icon: '&#xe8b5;',
+    description: '设施/设备综合查询'
+  },
+  // 缺陷/事故管理
+  {
+    name: '缺陷管理',
+    path: '/device/defect/management',
+    icon: '&#xe8b5;',
+    description: '缺陷管理'
+  },
+  {
+    name: '缺陷统计填报',
+    path: '/device/defect/statistics',
+    icon: '&#xe8b5;',
+    description: '缺陷统计填报'
+  },
+  {
+    name: '管线缺陷管理',
+    path: '/device/defect/pipeline',
+    icon: '&#xe8b5;',
+    description: '管线缺陷管理'
+  },
+  {
+    name: '设备事故查询',
+    path: '/device/defect/accident',
+    icon: '&#xe8b5;',
+    description: '设备事故查询'
+  },
+
+  // ==================== 监测中心 ====================
+  {
+    name: '监测对象配置',
+    path: '/monitor/object-config',
+    icon: '&#xe638;',
+    description: '监测对象配置管理'
+  },
+  {
+    name: '监测数据',
+    path: '/monitor/data',
+    icon: '&#xe638;',
+    description: '实时监测数据查看'
+  },
+  {
+    name: '视频监控',
+    path: '/monitor/video',
+    icon: '&#xe638;',
+    description: '视频监控管理'
+  },
+  {
+    name: '报警管理',
+    path: '/monitor/alarm',
+    icon: '&#xe638;',
+    description: '报警记录管理'
+  },
+  {
+    name: '数据分析',
+    path: '/monitor/data-analysis',
+    icon: '&#xe638;',
+    description: '监测数据分析'
+  },
+  {
+    name: '监测地图',
+    path: '/monitor/map',
+    icon: '&#xe638;',
+    description: '监测点位地图展示'
+  },
+
+  // ==================== 生产管理 ====================
+  {
+    name: '运维工单',
+    path: '/production/work-order',
+    icon: '&#xe622;',
+    description: '运维工单管理'
+  },
+  {
+    name: '现场作业',
+    path: '/production/scene',
+    icon: '&#xe622;',
+    description: '现场作业管理'
+  },
+  {
+    name: '两票管理',
+    path: '/production/two-ticket',
+    icon: '&#xe622;',
+    description: '工作票操作票管理'
+  },
+  {
+    name: '值班管理',
+    path: '/production/duty',
+    icon: '&#xe622;',
+    description: '值班排班管理'
+  },
+  {
+    name: '交接班管理',
+    path: '/production/handover',
+    icon: '&#xe622;',
+    description: '交接班记录管理'
+  },
+  {
+    name: '工艺可视化',
+    path: '/production/process-visual',
+    icon: '&#xe622;',
+    description: '生产工艺流程可视化'
+  },
+
+  // ==================== 计划经营 ====================
+  {
+    name: '项目管理',
+    path: '/planning/project',
+    icon: '&#xe6e7;',
+    description: '项目管理'
+  },
+  {
+    name: '预算管理',
+    path: '/planning/budget',
+    icon: '&#xe6e7;',
+    description: '年度预算编制与管理'
+  },
+  {
+    name: '成本管理',
+    path: '/planning/cost',
+    icon: '&#xe6e7;',
+    description: '生产成本核算与分析'
+  },
+  {
+    name: '合同管理',
+    path: '/planning/contract',
+    icon: '&#xe6e7;',
+    description: '合同签订与执行跟踪'
+  },
+  {
+    name: '绩效考核',
+    path: '/planning/performance',
+    icon: '&#xe6e7;',
+    description: '部门及个人绩效考核'
   },
 
   // ==================== 安全管理 ====================
@@ -67,136 +209,146 @@ export const shareablePages = [
     description: '安全事故记录'
   },
 
-  // ==================== 设备管理 ====================
+  // ==================== 物资管理 ====================
   {
-    name: '设备编码配置',
-    path: '/device/code-config',
-    icon: '&#xe8b5;',
-    description: '设备编码规则配置'
+    name: '仓库管理',
+    path: '/material/warehouse',
+    icon: '&#xe675;',
+    description: '仓库基础信息管理'
   },
   {
-    name: '设备台账',
-    path: '/device/ledger',
-    icon: '&#xe8b5;',
-    description: '设备台账管理'
+    name: '采购管理',
+    path: '/material/purchase',
+    icon: '&#xe675;',
+    description: '物资采购申请与审批'
   },
   {
-    name: '设备缺陷',
-    path: '/device/defect',
-    icon: '&#xe8b5;',
-    description: '设备缺陷管理'
+    name: '库存管理',
+    path: '/material/inventory',
+    icon: '&#xe675;',
+    description: '库存盘点与预警'
   },
   {
-    name: '设备评价',
-    path: '/device/evaluation',
-    icon: '&#xe8b5;',
-    description: '设备健康评价'
-  },
-  {
-    name: '设备检修-日常维护',
-    path: '/device/project/maintenance',
-    icon: '&#xe8b5;',
-    description: '设备日常维护管理'
-  },
-  {
-    name: '设备检修-年度检修',
-    path: '/device/project/annual-repair',
-    icon: '&#xe8b5;',
-    description: '设备年度检修管理'
-  },
-  {
-    name: '设备检修-大修管理',
-    path: '/device/project/overhaul',
-    icon: '&#xe8b5;',
-    description: '设备大修项目管理'
-  },
-  {
-    name: '设备规程',
-    path: '/device/regulation',
-    icon: '&#xe8b5;',
-    description: '设备操作规程管理'
-  },
-  {
-    name: '设备分析',
-    path: '/device/analysis',
-    icon: '&#xe8b5;',
-    description: '设备运行分析'
+    name: '出入库管理',
+    path: '/material/inout',
+    icon: '&#xe675;',
+    description: '物资出入库记录'
   },
 
-  // ==================== 生产管理 ====================
+  // ==================== 管网管理 ====================
   {
-    name: '运维工单',
-    path: '/production/work-order',
-    icon: '&#xe622;',
-    description: '运维工单管理'
+    name: 'GIS地图',
+    path: '/pipeline/gis',
+    icon: '&#xe630;',
+    description: '管网GIS地图展示'
   },
   {
-    name: '现场作业',
-    path: '/production/scene',
-    icon: '&#xe622;',
-    description: '现场作业管理'
+    name: '漏损管理',
+    path: '/pipeline/leakage',
+    icon: '&#xe630;',
+    description: '管网漏损检测与分析'
   },
   {
-    name: '两票管理',
-    path: '/production/two-ticket',
-    icon: '&#xe622;',
-    description: '工作票操作票管理'
+    name: '巡检管理',
+    path: '/pipeline/patrol',
+    icon: '&#xe630;',
+    description: '管网巡检计划与记录'
   },
   {
-    name: '值班管理',
-    path: '/production/duty',
-    icon: '&#xe622;',
-    description: '值班排班管理'
-  },
-  {
-    name: '交接班管理',
-    path: '/production/handover',
-    icon: '&#xe622;',
-    description: '交接班记录管理'
-  },
-  {
-    name: '工艺可视化',
-    path: '/production/process-visual',
-    icon: '&#xe622;',
-    description: '生产工艺流程可视化'
+    name: '档案管理',
+    path: '/pipeline/archive',
+    icon: '&#xe630;',
+    description: '管网工程档案管理'
   },
 
-  // ==================== 监测管理 ====================
+  // ==================== AI助手 ====================
   {
-    name: '监测对象配置',
-    path: '/monitor/object-config',
-    icon: '&#xe638;',
-    description: '监测对象配置管理'
+    name: '智能问答',
+    path: '/ai-assistant/chat',
+    icon: '&#xe8d3;',
+    description: 'AI智能问答助手'
   },
   {
-    name: '监测数据',
-    path: '/monitor/data',
-    icon: '&#xe638;',
-    description: '实时监测数据查看'
+    name: '预警分析',
+    path: '/ai-assistant/warning',
+    icon: '&#xe8d3;',
+    description: 'AI智能预警分析'
   },
   {
-    name: '视频监控',
-    path: '/monitor/video',
-    icon: '&#xe638;',
-    description: '视频监控管理'
+    name: '报表生成',
+    path: '/ai-assistant/report',
+    icon: '&#xe8d3;',
+    description: 'AI自动生成报表'
+  },
+
+  // ==================== 报表中心 ====================
+  {
+    name: '生产数据查询',
+    path: '/report/production-query',
+    icon: '&#xe6e6;',
+    description: '生产数据查询'
   },
   {
-    name: '报警管理',
-    path: '/monitor/alarm',
-    icon: '&#xe638;',
-    description: '报警记录管理'
+    name: '生产报表',
+    path: '/report/production',
+    icon: '&#xe6e6;',
+    description: '生产数据报表'
   },
   {
-    name: '数据分析',
-    path: '/monitor/data-analysis',
-    icon: '&#xe638;',
-    description: '监测数据分析'
+    name: '运营报表',
+    path: '/report/operation',
+    icon: '&#xe6e6;',
+    description: '运营分析报表'
   },
   {
-    name: '监测地图',
-    path: '/monitor/map',
-    icon: '&#xe638;',
-    description: '监测点位地图展示'
+    name: '质量报表',
+    path: '/report/quality',
+    icon: '&#xe6e6;',
+    description: '水质监测报表'
+  },
+  {
+    name: '自定义报表',
+    path: '/report/custom',
+    icon: '&#xe6e6;',
+    description: '自定义报表设计'
+  },
+
+  // ==================== 系统管理 ====================
+  {
+    name: '组织管理',
+    path: '/system/organization-management',
+    icon: '&#xe6e8;',
+    description: '组织管理'
+  },
+  {
+    name: '用户管理',
+    path: '/system/user',
+    icon: '&#xe6e8;',
+    description: '系统用户管理'
+  },
+  {
+    name: '角色管理',
+    path: '/system/role',
+    icon: '&#xe6e8;',
+    description: '角色权限配置'
+  },
+  {
+    name: '菜单管理',
+    path: '/system/menu',
+    icon: '&#xe6e8;',
+    description: '系统菜单配置'
+  },
+  {
+    name: '日志管理',
+    path: '/system/log',
+    icon: '&#xe6e8;',
+    description: '系统操作日志'
+  },
+  {
+    name: '系统配置',
+    path: '/system/config',
+    icon: '&#xe6e8;',
+    description: '系统参数配置'
   }
 ]
 
