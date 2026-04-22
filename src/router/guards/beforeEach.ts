@@ -31,9 +31,6 @@ const pendingLoading = ref(false)
  */
 function buildMenuTreeFromRoutes(router: Router): AppRouteRecord[] {
   const allRoutes = router.getRoutes()
-  
-  // 调试：打印所有路由路径
-  console.log('[路由调试] 所有路由路径:', allRoutes.map(r => ({ path: r.path, name: r.name })))
 
   // 静态路由名称列表（不应出现在菜单中的路由）
   const staticRouteNames = ['Login', 'Exception403', 'Exception404', 'Exception500']
@@ -52,9 +49,6 @@ function buildMenuTreeFromRoutes(router: Router): AppRouteRecord[] {
     const pathSegments = route.path.split('/').filter(Boolean)
     return pathSegments.length === 1
   })
-  
-  // 调试：打印顶层路由
-  console.log('[路由调试] 顶层路由:', topLevelRoutes.map(r => ({ path: r.path, name: r.name })))
 
   // 构建路由树结构
   const menuTree: AppRouteRecord[] = []
@@ -65,9 +59,6 @@ function buildMenuTreeFromRoutes(router: Router): AppRouteRecord[] {
       menuTree.push(menuItem)
     }
   }
-  
-  // 调试：打印菜单树
-  console.log('[路由调试] 菜单树:', JSON.stringify(menuTree, null, 2))
 
   return menuTree
 }
@@ -84,9 +75,9 @@ function buildMenuItemFromRoute(route: any, allRoutes: any[]): AppRouteRecord | 
     meta: route.meta || {}
   }
 
-  // 查找子路由 - 修改逻辑以支持多级子路由
+  // 查找子路由
   const children = allRoutes.filter(r => {
-    // 子路由的路径应该以父路径开头
+    // 子路由的路径应该以父路径开头，且比父路径多一层
     if (!r.path.startsWith(route.path + '/')) {
       return false
     }
@@ -94,11 +85,6 @@ function buildMenuItemFromRoute(route: any, allRoutes: any[]): AppRouteRecord | 
     // 只取直接子路由（不包含更深层的路由）
     return !relativePath.includes('/')
   })
-  
-  // 调试：打印子路由查找结果
-  if (route.path === '/safety') {
-    console.log('[路由调试] /safety 的子路由:', children.map(r => ({ path: r.path, name: r.name })))
-  }
 
   if (children.length > 0) {
     menuItem.children = children
