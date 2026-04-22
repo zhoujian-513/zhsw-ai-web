@@ -47,7 +47,7 @@
 </template>
 
 <script setup lang="ts">
-  import { computed } from 'vue'
+  import { computed, watch } from 'vue'
   import { storeToRefs } from 'pinia'
   import type { AppRouteRecord } from '@/types/router'
   import { formatMenuTitle } from '@/router/utils/utils'
@@ -96,6 +96,15 @@
    */
   const filteredMenuItems = computed(() => filterRoutes(props.list))
 
+  // 调试：监听 list 和 filteredMenuItems 变化
+  watch(() => props.list, (newVal) => {
+    console.log('[SidebarSubmenu调试] list 变化:', newVal?.length, newVal?.map(i => ({ path: i.path, title: i.meta?.title, isHide: i.meta?.isHide })))
+  }, { immediate: true })
+
+  watch(filteredMenuItems, (newVal) => {
+    console.log('[SidebarSubmenu调试] filteredMenuItems 变化:', newVal?.length, newVal?.map(i => ({ path: i.path, title: i.meta?.title })))
+  }, { immediate: true })
+
   /**
    * 跳转到指定页面
    * @param item 菜单项数据
@@ -124,6 +133,7 @@
       .filter((item) => {
         // 如果当前项被隐藏，直接过滤掉
         if (item.meta?.isHide) {
+          console.log('[SidebarSubmenu调试] 过滤掉隐藏菜单:', item.path, item.meta?.title)
           return false
         }
 
