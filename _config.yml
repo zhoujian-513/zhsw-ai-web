@@ -1,0 +1,12 @@
+# Cloudflare Pages 配置文件
+# 用于配置构建设置
+
+build:
+  command: npm run build:skip-type
+  output_directory: dist
+  
+# 路由规则
+routes:
+  - from: /*
+    to: /index.html
+    status: 200
