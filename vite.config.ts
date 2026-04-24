@@ -27,7 +27,9 @@ export default ({ mode }: { mode: string }) => {
   return defineConfig({
     define: {
       __APP_VERSION__: JSON.stringify(VITE_VERSION),
-      'import.meta.env.VITE_USE_MOCK': JSON.stringify(env.VITE_USE_MOCK || 'false')
+      'import.meta.env.VITE_USE_MOCK': JSON.stringify(env.VITE_USE_MOCK || 'false'),
+      'import.meta.env.GITHUB_PAGES': JSON.stringify(process.env.GITHUB_PAGES || 'false'),
+      'import.meta.env.GITHUB_REPOSITORY': JSON.stringify(process.env.GITHUB_REPOSITORY || '')
     },
     base,
     server: {
