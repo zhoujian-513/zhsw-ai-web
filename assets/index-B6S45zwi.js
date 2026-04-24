@@ -1,0 +1,1 @@
+import{d as a,c as e,b as s,o}from"./index-DZ_N0SHW.js";import{_ as p}from"./_plugin-vue_export-helper-BCo6x5W8.js";const d={class:"page-container"},n=p(a({__name:"index",setup:a=>(a,p)=>(o(),e("div",d,[...p[0]||(p[0]=[s("h1",null,"监测统计报表",-1),s("p",null,"此页面正在开发中...",-1)])]))}),[["__scopeId","data-v-23d3d51f"]]);export{n as default};
