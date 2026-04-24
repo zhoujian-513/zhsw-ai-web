@@ -31,6 +31,8 @@ jobs:
         env:
           GITHUB_PAGES: true
           GITHUB_REPOSITORY: zhoujian-513/zhsw-ai-web
+          # 确保使用生产环境配置，启用 Mock 模式
+          NODE_ENV: production
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
