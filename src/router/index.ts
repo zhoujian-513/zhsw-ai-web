@@ -7,7 +7,8 @@ import { setupBeforeEachGuard } from './guards/beforeEach'
 import { setupAfterEachGuard } from './guards/afterEach'
 
 // Mock 模式：合并静态路由和异步路由
-const USE_MOCK = import.meta.env.VITE_USE_MOCK === 'true'
+// 强制启用 Mock 模式用于 GitHub Pages 演示
+const USE_MOCK = true
 const allRoutes = USE_MOCK ? [...staticRoutes, ...asyncRoutes] : staticRoutes
 
 // GitHub Pages 部署时自动设置 base 路径
