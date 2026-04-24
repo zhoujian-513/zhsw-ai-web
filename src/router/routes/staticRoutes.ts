@@ -11,6 +11,13 @@ import { AppRouteRecordRaw } from '../utils/utils'
  * 2、静态路由不管是否登录都可以访问
  */
 export const staticRoutes: AppRouteRecordRaw[] = [
+  // 首页重定向到登录页
+  {
+    path: '/',
+    name: 'Root',
+    redirect: '/auth/login',
+    meta: { isHideTab: true }
+  },
   // 不需要登录就能访问的路由示例
   // {
   //   path: '/welcome',
