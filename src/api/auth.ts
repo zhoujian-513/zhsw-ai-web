@@ -2,7 +2,8 @@ import request from '@/utils/http'
 import { mockLogin, mockGetUserInfo } from '@/mock/auth'
 
 // 是否使用 Mock 模式（产品经理演示模式，无需后端）
-const USE_MOCK = import.meta.env.VITE_USE_MOCK === 'true'
+// 强制启用 Mock 模式用于 GitHub Pages 演示
+const USE_MOCK = true
 
 /**
  * 登录
