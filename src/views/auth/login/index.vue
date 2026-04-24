@@ -198,9 +198,8 @@
         userStore.setLoginStatus(true)
 
         showLoginSuccessNotice()
-        // Mock 模式下直接跳转到工作台
-        const USE_MOCK = import.meta.env.VITE_USE_MOCK === 'true'
-        router.push(USE_MOCK ? '/workbench' : '/')
+        // 直接跳转到工作台
+        router.push('/workbench')
       } else {
         throw new Error(message || 'Login failed')
       }
