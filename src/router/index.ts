@@ -10,9 +10,14 @@ import { setupAfterEachGuard } from './guards/afterEach'
 const USE_MOCK = import.meta.env.VITE_USE_MOCK === 'true'
 const allRoutes = USE_MOCK ? [...staticRoutes, ...asyncRoutes] : staticRoutes
 
+// GitHub Pages 部署时自动设置 base 路径
+const base = import.meta.env.GITHUB_PAGES === 'true'
+  ? `/${import.meta.env.GITHUB_REPOSITORY?.split('/')[1] || 'zhsw-ai-web'}`
+  : '/'
+
 // 创建路由实例
 export const router = createRouter({
-  history: createWebHistory(),
+  history: createWebHistory(base),
   routes: allRoutes as any
 })
 
