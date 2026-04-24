@@ -1,1 +1,0 @@
-import{q as e,aa as s,g as a}from"./index-BfSonIYO.js";const i=({from:i,replacement:o,scope:t,version:r,ref:n,type:p="API"},m)=>{e(()=>a(m),e=>{e&&s(t,`[${p}] ${i} is about to be deprecated in version ${r}, please use ${o} instead.\nFor more detail, please visit: ${n}\n`)},{immediate:!0})};export{i as u};
